@@ -9,3 +9,16 @@ function listening() {
         echo "Usage: listening [pattern]"
     fi
 }
+
+function gitpruneremote() {
+    if [ $# -eq 1 ]; then
+	REMOTE=$1
+	git branch -r | grep ${REMOTE}/ | grep -Ev 'master$|integration$' | sed "s|^  ${REMOTE}/|:|" | xargs git push --no-verify ${REMOTE}
+    else
+        echo "Usage: pruneremote [remote]"
+    fi
+}
+
+function gittidy() {
+    git branch | grep -Ev "master|integration" | xargs git branch -D
+}
