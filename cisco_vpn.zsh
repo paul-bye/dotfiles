@@ -6,6 +6,24 @@ function __is-vpn-connected() {
     return 1
 }
 
+function __connect-to-vpn() {
+    echo "Connecting to VPN..."
+    pgrep -x -- "Cisco AnyConnect Secure Mobility Client" | xargs kill
+    #echo "$VPN_USERNAME\n$VPN_PASSWORD\ny" | /opt/cisco/anyconnect/bin/vpn -s connect $VPN_HOST &> /dev/null
+    echo "$VPN_USERNAME\n$VPN_PASSWORD\ny" | /opt/cisco/anyconnect/bin/vpn -s connect $VPN_HOST
+    open -a /Applications/Cisco/Cisco\ AnyConnect\ Secure\ Mobility\ Client.app -gj
+    echo "VPN connected"
+    return 0
+}
+
+function __disconnect-from-vpn() {
+    echo "Disconnecting from VPN..."
+    /opt/cisco/anyconnect/bin/vpn -s disconnect &> /dev/null
+    pgrep -x -- "Cisco AnyConnect Secure Mobility Client" | xargs kill
+    echo "VPN disconnected."
+    return 0
+}
+
 function vpn() {
 	case "$1" in 
 		on)
@@ -13,17 +31,12 @@ function vpn() {
 				echo "VPN is already connected"
         		return 1
     		else
-      			pgrep -x -- "Cisco AnyConnect Secure Mobility Client" | xargs kill
-      			echo "$VPN_USERNAME\n$VPN_PASSWORD\ny" | /opt/cisco/anyconnect/bin/vpn -s connect $VPN_HOST
-      			open -a /Applications/Cisco/Cisco\ AnyConnect\ Secure\ Mobility\ Client.app -gj
-      			return 0
+			 __connect-to-vpn
     		fi
 			;;
 		off)
 			 if (__is-vpn-connected); then
-			 	/opt/cisco/anyconnect/bin/vpn -s disconnect
-    			pgrep -x -- "Cisco AnyConnect Secure Mobility Client" | xargs kill
-    			return 0
+				__disconnect-from-vpn
   			else
   				echo "VPN is not connected"            
     			return 1
