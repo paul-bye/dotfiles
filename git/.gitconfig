@@ -1,0 +1,44 @@
+[user]
+	name = Paul Bye
+	email = paul.bye@blackcatsolutions.co.uk
+[push]
+	default = simple
+[color]
+	ui = true
+[core]
+	excludesfile = /Users/paul/.gitignore_global
+[diff]
+	tool = diffmerge
+[difftool "diffmerge"]
+	cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
+[merge]
+	tool = diffmerge
+[mergetool "diffmerge"]
+	cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
+	trustExitCode = true
+[alias]
+	br = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+	co = checkout
+	coi = checkout integration
+        cob = checkout -b
+        cm = !git add -A && git commit -m
+        undo = reset HEAD~1 --mixed
+        amend = commit -a --amend
+        branch-name = "!git rev-parse --abbrev-ref HEAD"
+        pushme = "!git push pb $(git branch-name)"
+        open = !open https://github-risk.int.thomsonreuters.com/paul-bye/$(basename `git rev-parse --show-toplevel`)
+
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[url "https://github.com/"]
+        insteadOf = git@github.com:
+[url "https://"]
+        insteadOf = git://
+[url "git@github-risk.int.thomsonreuters.com"]
+        insteadOf = git@github.complinet.com
+[url "https://github-risk.int.thomsonreuters.com/"]
+        insteadOf = https://github.complinet.com
+[url "git://github-risk.int.thomsonreuters.com/"]
+        insteadOf = git://github.complinet.com
