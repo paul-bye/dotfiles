@@ -20,5 +20,5 @@ function gitpruneremote() {
 }
 
 function gittidy() {
-    git branch | grep -Ev "master|integration" | xargs git branch -D
+    git branch | grep -Ev "master|integration|develop|interim" | xargs git branch -D
 }

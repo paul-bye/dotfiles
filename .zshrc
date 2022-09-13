@@ -1,33 +1,50 @@
-export ZSH=$HOME/.oh-my-zsh
+# Download Znap, if it's not there yet.
+[[ -f ~/.zsh-plugins/zsh-snap/znap.zsh ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ~/.zsh-plugins/zsh-snap
 
-# Theme settings
-#ZSH_THEME="powerlevel9k/powerlevel9k"
-ZSH_THEME=powerlevel10k/powerlevel10k
-POWERLEVEL9K_MODE="nerdfont-complete"
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="▶ "
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs)
+source ~/.zsh-plugins/zsh-snap/znap.zsh
 
-# Plugins
-plugins=(
-    common-aliases
-    docker
-    git
-    history-substring-search
-    zsh-syntax-highlighting
-    zsh-autosuggestions
-)
+setopt SHARE_HISTORY
+HISTFILE=$HOME/.zsh_history
+SAVEHIST=10000
+HISTSIZE=9999
+setopt HIST_EXPIRE_DUPS_FIRST
 
-source $ZSH/oh-my-zsh.sh
+setopt auto_cd
+
+znap source zsh-users/zsh-syntax-highlighting
+znap source zsh-users/zsh-completions
+znap source zsh-users/zsh-history-substring-search
+znap source zsh-users/zsh-autosuggestions
+znap source agkozak/zsh-z
+
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^[^[[D^' backward-word
+bindkey '^[^[[C^' forward-word
+
+zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'
 
 # Load all custom configurations from ~/.dotfiles
-for config_file (~/.dotfiles/*.zsh(N)); do
+for config_file (~/.dotfiles/**/*.zsh(N)); do
   source $config_file
 done
 unset config_file
 
+() {
+  local -a plugins=(
+      common-aliases
+      docker
+      git
+      nvm
+  )
+  znap source ohmyzsh/ohmyzsh plugins/$^plugins
+}
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+znap prompt romkatv/powerlevel10k
+
+export SDKMAN_DIR="/Users/paulby/.sdkman"
+[[ -s "~/.sdkman/bin/sdkman-init.sh" ]] && source "~/.sdkman/bin/sdkman-init.sh"
+
+git
