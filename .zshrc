@@ -47,4 +47,3 @@ znap prompt romkatv/powerlevel10k
 export SDKMAN_DIR="/Users/paulby/.sdkman"
 [[ -s "~/.sdkman/bin/sdkman-init.sh" ]] && source "~/.sdkman/bin/sdkman-init.sh"
 
-git
