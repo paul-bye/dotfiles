@@ -1,7 +1,8 @@
 .DS_Store
+*~
+*.swp
 *.ipr
 *.iws
 *.iml
 .java-version
-build2.sh
 **/docker-compose.override.yml

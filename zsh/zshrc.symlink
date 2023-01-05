@@ -1,0 +1,23 @@
+# Download Znap, if it's not there yet.
+[[ -f ~/.zsh-plugins/zsh-snap/znap.zsh ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ~/.zsh-plugins/zsh-snap
+
+source ~/.zsh-plugins/zsh-snap/znap.zsh
+
+export DOT_FILES=$HOME/.dotfiles
+
+znap source zsh-users/zsh-syntax-highlighting
+znap source zsh-users/zsh-completions
+znap source zsh-users/zsh-history-substring-search
+znap source zsh-users/zsh-autosuggestions
+znap source agkozak/zsh-z
+znap source ohmyzsh/ohmyzsh plugins/{git,nvm,docker,common-aliases}
+
+# Load all custom configurations from $DOT_FILES
+for config_file ($DOT_FILES/**/*.zsh(N)); do
+  source $config_file
+done
+unset config_file
+
+#znap prompt agnoster/agnoster-zsh-theme
